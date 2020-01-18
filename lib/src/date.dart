@@ -59,7 +59,7 @@ class PersianDate {
   /// time zone (local or UTC).
   ///
   PersianDate.fromMillisecondsSinceEpoch(int millisecondsSinceEpoch,
-      {bool isUtc: false})
+      {bool isUtc = false})
       : this(DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch,
             isUtc: isUtc));
 
@@ -72,23 +72,25 @@ class PersianDate {
   /// 1970-01-01T00:00:00Z + [microsecondsSinceEpoch] us in the given
   /// time zone (local or UTC).
   PersianDate.fromMicrosecondsSinceEpoch(int microsecondsSinceEpoch,
-      {bool isUtc: false})
+      {bool isUtc = false})
       : this(DateTime.fromMicrosecondsSinceEpoch(microsecondsSinceEpoch,
             isUtc: isUtc));
 
   static int _month(int day) {
-    if (day < 6 * 31)
+    if (day < 6 * 31) {
       return (day / 31.0).ceil();
-    else
+    } else {
       return (((day - 6 * 31) / 30.0) + 6).ceil();
+    }
   }
 
   static int _dayOfMonth(int day) {
     final m = _month(day);
-    if (m <= 6)
+    if (m <= 6) {
       return day - 31 * (m - 1);
-    else
+    } else {
       return day - (6 * 31) - (m - 7) * 30;
+    }
   }
 
   static int _getGregDayOfYear(int year, int month, int day) {

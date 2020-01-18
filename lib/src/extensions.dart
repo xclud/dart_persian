@@ -1,4 +1,4 @@
-import 'package:persian/persian.dart';
+import 'date.dart';
 
 @deprecated
 
@@ -8,7 +8,7 @@ String toPersian(String text) {
     return text;
   }
 
-  final output = new StringBuffer();
+  final output = StringBuffer();
   final persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
 
   for (int i = 0; i < text.length; i++) {
@@ -16,7 +16,7 @@ String toPersian(String text) {
     if (char >= 48 && char <= 57) {
       output.write(persian[char - 48]);
     } else {
-      output.write(new String.fromCharCode(char));
+      output.write(String.fromCharCode(char));
     }
   }
 
