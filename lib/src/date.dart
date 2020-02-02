@@ -28,7 +28,7 @@ class PersianDate {
   @override
   String toString() {
     return '$year/${month.toString().padLeft(2, '0')}/${day.toString().padLeft(2, '0')}'
-        .withPersianLetters();
+        .withPersianNumbers();
   }
 
   PersianDate(DateTime date) {
