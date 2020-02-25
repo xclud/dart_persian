@@ -1,4 +1,5 @@
 # persian
+[![pub package](https://img.shields.io/pub/v/persian.svg)](https://pub.dartlang.org/packages/persian)
 
 Implements helper functions/extensions for Persian language/culture. Includes number replacement methods for String class and PersianDate class.
 
