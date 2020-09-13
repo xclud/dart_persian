@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:persian/persian.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  int a = 300000;
+  print(a.toPersianString());
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

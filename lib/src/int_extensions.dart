@@ -52,24 +52,33 @@ final _hundredNames = [
   'نهصد'
 ];
 
-String _convertLessThanOneThousand(int number, String separator) {
+List<String> _convertLessThanOneThousand(int number) {
   int n = number;
   final parts = <String>[];
 
   if (n % 100 < 20) {
-    parts.add(_numNames[n % 100]);
+    final mod = n % 100;
+    if (mod != 0) {
+      parts.add(_numNames[mod]);
+    }
     n ~/= 100;
   } else {
-    parts.add(_numNames[n % 10]);
+    final mod0 = n % 10;
+    if (mod0 != 0) {
+      parts.add(_numNames[mod0]);
+    }
     n ~/= 10;
-    parts.add(_tensNames[n % 10]);
+    final mod1 = n % 10;
+    if (mod1 != 0) {
+      parts.add(_tensNames[mod1]);
+    }
     n ~/= 10;
   }
   if (n > 0) {
     parts.add(_hundredNames[n - 1]);
   }
 
-  return parts.reversed.join(separator);
+  return parts.reversed.toList();
 }
 
 String _toPersianString(int number, String separator) {
@@ -86,23 +95,27 @@ String _toPersianString(int number, String separator) {
   final thousands = int.parse(sNumber.substring(9, 12));
 
   if (billions != 0) {
-    final b = _convertLessThanOneThousand(billions, separator);
+    final b = _convertLessThanOneThousand(billions).join(separator);
     parts.add('$b میلیارد');
   }
 
   if (millions > 0) {
-    final m = _convertLessThanOneThousand(millions, separator);
+    final m = _convertLessThanOneThousand(millions).join(separator);
     parts.add('$m میلیون');
   }
 
   if (hundredThousands > 0) {
-    final t = _convertLessThanOneThousand(hundredThousands, separator);
-    parts.add('$t هزار');
+    final t = _convertLessThanOneThousand(hundredThousands).join(separator);
+    if (t.isNotEmpty) {
+      parts.add('$t هزار');
+    }
   }
 
-  final s = _convertLessThanOneThousand(thousands, separator);
-  parts.add(s);
+  final s = _convertLessThanOneThousand(thousands);
+  if (s.length > 0) {
+    parts.add(s.join(separator));
+  }
 
-  final result = parts.join(' و ');
+  final result = parts.join(separator);
   return result;
 }
