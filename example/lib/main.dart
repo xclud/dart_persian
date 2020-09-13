@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter'.withPersianNumbers(),
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),

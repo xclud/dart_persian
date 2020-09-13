@@ -21,3 +21,8 @@ String myPersianText = myText.withPersianNumbers(); //Will be ۱۲۳۴۵۶۷۸۹
 DateTime myDate = DateTime.now();
 PersianDate myPersianDate = myDate.toPersian(); //Will be 1398/10/19
 ```
+
+```dart
+int number = 123456789;
+String myPersianNumber = number.toPersianString(); //Will be صد و بیست و سه میلیون و چهارصد و پنجاه و شش هزار و هفتصد و هشتاد و نه
+```
