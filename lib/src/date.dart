@@ -31,7 +31,13 @@ class PersianDate {
         .withPersianNumbers();
   }
 
-  PersianDate(DateTime date) {
+  PersianDate({
+    required this.year,
+    required this.month,
+    required this.day,
+  });
+
+  factory PersianDate.fromDateTime(DateTime date) {
     // passed days from Greg orig
     final d = ((date.year - 1) * _gregorianLength).ceil();
     final persianBase = d +
@@ -44,9 +50,11 @@ class PersianDate {
             .floor() +
         1;
 
-    year = (persianBase / _persianLength).ceil() - 2346;
-    month = _month(persianDayOfYear);
-    day = _dayOfMonth(persianDayOfYear);
+    final year = (persianBase / _persianLength).ceil() - 2346;
+    final month = _month(persianDayOfYear);
+    final day = _dayOfMonth(persianDayOfYear);
+
+    return PersianDate(year: year, month: month, day: day);
   }
 
   /// Constructs a new [PersianDate] instance
@@ -58,10 +66,11 @@ class PersianDate {
   /// 1970-01-01T00:00:00Z + [millisecondsSinceEpoch] ms in the given
   /// time zone (local or UTC).
   ///
-  PersianDate.fromMillisecondsSinceEpoch(int millisecondsSinceEpoch,
-      {bool isUtc = false})
-      : this(DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch,
-            isUtc: isUtc));
+  factory PersianDate.fromMillisecondsSinceEpoch(int millisecondsSinceEpoch,
+          {bool isUtc = false}) =>
+      PersianDate.fromDateTime(DateTime.fromMillisecondsSinceEpoch(
+          millisecondsSinceEpoch,
+          isUtc: isUtc));
 
   /// Constructs a new [PersianDate] instance
   /// with the given [microsecondsSinceEpoch].
@@ -71,10 +80,11 @@ class PersianDate {
   /// The constructed [PersianDate] represents
   /// 1970-01-01T00:00:00Z + [microsecondsSinceEpoch] us in the given
   /// time zone (local or UTC).
-  PersianDate.fromMicrosecondsSinceEpoch(int microsecondsSinceEpoch,
-      {bool isUtc = false})
-      : this(DateTime.fromMicrosecondsSinceEpoch(microsecondsSinceEpoch,
-            isUtc: isUtc));
+  factory PersianDate.fromMicrosecondsSinceEpoch(int microsecondsSinceEpoch,
+          {bool isUtc = false}) =>
+      PersianDate.fromDateTime(DateTime.fromMicrosecondsSinceEpoch(
+          microsecondsSinceEpoch,
+          isUtc: isUtc));
 
   static int _month(int day) {
     if (day < 6 * 31) {
