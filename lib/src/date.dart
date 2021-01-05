@@ -1,26 +1,16 @@
 import 'dart:core';
 import 'extensions.dart';
 
-class PersianDate {
-  static const _persianLength = 365.24219879;
-  static const _gregorianLength = 365.2425;
-  static const _gregorianOriginFromPersianBase = 629964;
-  static final _gregorianMonthLength = [
-    0,
-    31,
-    28,
-    31,
-    30,
-    31,
-    30,
-    31,
-    31,
-    30,
-    31,
-    30,
-    31
-  ];
+int _getJulianDayNumber(int year, int month, int day) {
+  return (((year + ((month - 8) ~/ 6) + 100100) * 1461) ~/ 4) +
+      ((153 * ((month + 9) % 12) + 2) ~/ 5) +
+      day -
+      34840408 -
+      ((((year + 100100 + ((month - 8) ~/ 6)) ~/ 100) * 3) ~/ 4) +
+      752;
+}
 
+class PersianDate {
   int year;
   int month;
   int day;
@@ -31,30 +21,43 @@ class PersianDate {
         .withPersianNumbers();
   }
 
-  PersianDate({
-    required this.year,
-    required this.month,
-    required this.day,
-  });
+  PersianDate(
+    this.year,
+    this.month,
+    this.day,
+  );
 
+  /// Converts the [DateTime] to a [PersianDate].
   factory PersianDate.fromDateTime(DateTime date) {
-    // passed days from Greg orig
-    final d = ((date.year - 1) * _gregorianLength).ceil();
-    final persianBase = d +
-        _gregorianOriginFromPersianBase +
-        _getGregDayOfYear(date.year, date.month, date.day);
+    final julianDayNumber =
+        _getJulianDayNumber(date.year, date.month, date.day);
+    final int year = date.year;
+    int persianYear = year - 621;
+    final r = _JalaliCalculation.calculate(persianYear);
+    final int jdn1f = _getJulianDayNumber(year, 3, r.march);
+    int k = julianDayNumber - jdn1f;
+    // Find number of days that passed since 1 Farvardin.
+    if (k >= 0) {
+      if (k <= 185) {
+        // The first 6 months.
+        final int jm = 1 + (k ~/ 31);
+        final int jd = (k % 31) + 1;
 
-    final persianDayOfYear = (((persianBase / _persianLength) -
-                    (persianBase / _persianLength).floor()) *
-                365)
-            .floor() +
-        1;
+        return PersianDate(persianYear, jm, jd);
+      } else {
+        // The remaining months.
+        k -= 186;
+      }
+    } else {
+      // Previous Jalali year.
+      persianYear -= 1;
+      k += 179;
+      if (r.leap == 1) k += 1;
+    }
+    final int jm = 7 + (k ~/ 30);
+    final int jd = (k % 30) + 1;
 
-    final year = (persianBase / _persianLength).ceil() - 2346;
-    final month = _month(persianDayOfYear);
-    final day = _dayOfMonth(persianDayOfYear);
-
-    return PersianDate(year: year, month: month, day: day);
+    return PersianDate(persianYear, jm, jd);
   }
 
   /// Constructs a new [PersianDate] instance
@@ -85,34 +88,104 @@ class PersianDate {
       PersianDate.fromDateTime(DateTime.fromMicrosecondsSinceEpoch(
           microsecondsSinceEpoch,
           isUtc: isUtc));
+}
 
-  static int _month(int day) {
-    if (day < 6 * 31) {
-      return (day / 31.0).ceil();
-    } else {
-      return (((day - 6 * 31) / 30.0) + 6).ceil();
+/// Internal class
+class _JalaliCalculation {
+  /// Number of years since the last leap year (0 to 4)
+  final int leap;
+
+  /// Gregorian year of the beginning of Jalali year
+  final int gy;
+
+  /// The March day of Farvardin the 1st (1st day of jy)
+  final int march;
+
+  _JalaliCalculation({
+    this.leap,
+    this.gy,
+    this.march,
+  });
+
+  static final List<int> breaks = const [
+    -61,
+    9,
+    38,
+    199,
+    426,
+    686,
+    756,
+    818,
+    1111,
+    1181,
+    1210,
+    1635,
+    2060,
+    2097,
+    2192,
+    2262,
+    2324,
+    2394,
+    2456,
+    3178,
+  ];
+
+  /// This determines if the Persian Year is
+  /// leap (366-day long) or is the common year (365 days), and
+  /// finds the day in March (Gregorian calendar) of the first
+  /// day of the Persian Year.
+  ///
+  /// [1. see here](http://www.astro.uni.torun.pl/~kb/Papers/EMP/PersianC-EMP.htm)
+  ///
+  /// [2. see here](http://www.fourmilab.ch/documents/calendar/)
+  factory _JalaliCalculation.calculate(int persianYear) {
+    // Jalali years starting the 33-year rule.
+
+    final int bl = breaks.length;
+    final int gy = persianYear + 621;
+    int leapJ = -14;
+    int jp = breaks[0];
+    int jump = 0;
+
+    // should not happen
+    if (persianYear < -61 || persianYear >= 3178) {
+      throw StateError('should not happen');
     }
-  }
 
-  static int _dayOfMonth(int day) {
-    final m = _month(day);
-    if (m <= 6) {
-      return day - 31 * (m - 1);
-    } else {
-      return day - (6 * 31) - (m - 7) * 30;
-    }
-  }
-
-  static int _getGregDayOfYear(int year, int month, int day) {
-    bool leap = (year % 4) == 0 && (year % 400) != 0;
-    int sum = 0;
-    for (int i = 0; i < month; i++) {
-      if (i == 2 && leap) {
-        sum += 29;
-      } else {
-        sum += _gregorianMonthLength[i];
+    // Find the limiting years for the Jalali year jy.
+    for (int i = 1; i < bl; i += 1) {
+      final int jm = breaks[i];
+      jump = jm - jp;
+      if (persianYear < jm) {
+        break;
       }
+      leapJ = leapJ + (jump ~/ 33) * 8 + (((jump % 33)) ~/ 4);
+      jp = jm;
     }
-    return sum + day - 2;
+    int n = persianYear - jp;
+
+    // Find the number of leap years from AD 621 to the beginning
+    // of the current Jalali year in the Persian calendar.
+    leapJ = leapJ + ((n) ~/ 33) * 8 + (((n % 33) + 3) ~/ 4);
+    if ((jump % 33) == 4 && jump - n == 4) {
+      leapJ += 1;
+    }
+
+    // And the same in the Gregorian calendar (until the year gy).
+    final int leapG = ((gy) ~/ 4) - (((((gy) ~/ 100) + 1) * 3) ~/ 4) - 150;
+
+    // Determine the Gregorian date of Farvardin the 1st.
+    final int march = 20 + leapJ - leapG;
+
+    // Find how many years have passed since the last leap year.
+    if (jump - n < 6) {
+      n = n - jump + ((jump + 4) ~/ 33) * 33;
+    }
+    int leap = ((((n + 1) % 33) - 1) % 4);
+    if (leap == -1) {
+      leap = 4;
+    }
+
+    return _JalaliCalculation(leap: leap, gy: gy, march: march);
   }
 }
