@@ -1,7 +1,9 @@
 name: persian
 description: Utilities for Persian language/culture. Includes some String extensions and PersianDate class. 
 version: 1.0.1
-homepage: https://github.com/xclud/persian
+repository: https://github.com/xclud/persian
+homepage: https://pwa.ir
+
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
