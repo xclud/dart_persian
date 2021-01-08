@@ -3,7 +3,7 @@ import 'date.dart';
 /// Persian DateTime extension methods.
 extension PersianDateTimeExtensions on DateTime {
   PersianDate toPersian() {
-    return PersianDate(this);
+    return PersianDate.fromDateTime(this);
   }
 }
 
@@ -11,7 +11,7 @@ extension PersianDateTimeExtensions on DateTime {
 extension PersianStringExtensions on String {
   /// Replaces any number with English numbers.
   String withEnglishNumbers() {
-    if (this == null || this.isEmpty) {
+    if (this.isEmpty) {
       return this;
     }
 
@@ -43,7 +43,7 @@ extension PersianStringExtensions on String {
 
   /// Replaces English numbers (and some other number system) with Persian numbers.
   String withPersianNumbers() {
-    if (this == null || this.isEmpty) {
+    if (this.isEmpty) {
       return this;
     }
 
@@ -75,7 +75,7 @@ extension PersianStringExtensions on String {
 
   /// Replaces ك with ک, and ي with ی.
   String withPersianLetters() {
-    if (this == null || this.isEmpty) {
+    if (this.isEmpty) {
       return this;
     }
 
