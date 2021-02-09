@@ -102,9 +102,9 @@ class _JalaliCalculation {
   final int march;
 
   _JalaliCalculation({
-    this.leap,
-    this.gy,
-    this.march,
+    required this.leap,
+    required this.gy,
+    required this.march,
   });
 
   static final List<int> breaks = const [
