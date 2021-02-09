@@ -1,3 +1,4 @@
+### [1.0.2] - Migrated to null-safety (dart 2.12.0).
 ### [1.0.1] - PersianDate bug fixed.
 ### [1.0.0-nullsafety.0] - Null-safety.
 ### [0.1.5+1] - Int to Persian String conversion [Bug Fixed].
