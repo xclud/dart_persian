@@ -10,10 +10,11 @@ int _getJulianDayNumber(int year, int month, int day) {
       752;
 }
 
+/// An instant in Persian calendar, such as Farvardin 11, 1365.
 class PersianDate {
-  int year;
-  int month;
-  int day;
+  final int year;
+  final int month;
+  final int day;
 
   @override
   String toString() {
@@ -21,19 +22,22 @@ class PersianDate {
         .withPersianNumbers();
   }
 
+  /// Creates a [PersianDate] from the Persian year, month and day.
+  ///
+  /// Example: PersianDate(1400, 12, 29);
   PersianDate(
     this.year,
     this.month,
     this.day,
   );
 
-  /// Converts the [DateTime] to a [PersianDate].
+  /// Creates a [PersianDate] from the equivalent [DateTime].
   factory PersianDate.fromDateTime(DateTime date) {
     final julianDayNumber =
         _getJulianDayNumber(date.year, date.month, date.day);
     final int year = date.year;
     int persianYear = year - 621;
-    final r = _JalaliCalculation.calculate(persianYear);
+    final r = _PersianDateCalculation.calculate(persianYear);
     final int jdn1f = _getJulianDayNumber(year, 3, r.march);
     int k = julianDayNumber - jdn1f;
     // Find number of days that passed since 1 Farvardin.
@@ -49,7 +53,7 @@ class PersianDate {
         k -= 186;
       }
     } else {
-      // Previous Jalali year.
+      // Previous Persian year.
       persianYear -= 1;
       k += 179;
       if (r.leap == 1) k += 1;
@@ -91,17 +95,17 @@ class PersianDate {
 }
 
 /// Internal class
-class _JalaliCalculation {
+class _PersianDateCalculation {
   /// Number of years since the last leap year (0 to 4)
   final int leap;
 
-  /// Gregorian year of the beginning of Jalali year
+  /// Gregorian year of the beginning of Persian year
   final int gy;
 
   /// The March day of Farvardin the 1st (1st day of jy)
   final int march;
 
-  _JalaliCalculation({
+  _PersianDateCalculation({
     required this.leap,
     required this.gy,
     required this.march,
@@ -138,8 +142,8 @@ class _JalaliCalculation {
   /// [1. see here](http://www.astro.uni.torun.pl/~kb/Papers/EMP/PersianC-EMP.htm)
   ///
   /// [2. see here](http://www.fourmilab.ch/documents/calendar/)
-  factory _JalaliCalculation.calculate(int persianYear) {
-    // Jalali years starting the 33-year rule.
+  factory _PersianDateCalculation.calculate(int persianYear) {
+    // Persian years starting the 33-year rule.
 
     final int bl = breaks.length;
     final int gy = persianYear + 621;
@@ -152,7 +156,7 @@ class _JalaliCalculation {
       throw StateError('should not happen');
     }
 
-    // Find the limiting years for the Jalali year jy.
+    // Find the limiting years for the Persian year jy.
     for (int i = 1; i < bl; i += 1) {
       final int jm = breaks[i];
       jump = jm - jp;
@@ -165,7 +169,7 @@ class _JalaliCalculation {
     int n = persianYear - jp;
 
     // Find the number of leap years from AD 621 to the beginning
-    // of the current Jalali year in the Persian calendar.
+    // of the current Persian year in the Persian calendar.
     leapJ = leapJ + ((n) ~/ 33) * 8 + (((n % 33) + 3) ~/ 4);
     if ((jump % 33) == 4 && jump - n == 4) {
       leapJ += 1;
@@ -186,6 +190,6 @@ class _JalaliCalculation {
       leap = 4;
     }
 
-    return _JalaliCalculation(leap: leap, gy: gy, march: march);
+    return _PersianDateCalculation(leap: leap, gy: gy, march: march);
   }
 }

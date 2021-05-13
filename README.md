@@ -3,6 +3,8 @@
 
 Implements helper functions/extensions for Persian language/culture. Includes number replacement methods for String class and PersianDate class.
 
+This package is a Dart package, which can be used in both Flutter and Dart projects.
+
 ## Getting Started
 
 **Import the package**
