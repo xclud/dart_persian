@@ -1,3 +1,4 @@
+### [1.1.1] - Update repository url.
 ### [1.1.0] - PersianDate is immutable now.
 ### [1.0.2] - Migrated to null-safety (dart 2.12.0).
 ### [1.0.1] - PersianDate bug fixed.
