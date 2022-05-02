@@ -1,19 +1,35 @@
-# persian
 [![pub package](https://img.shields.io/pub/v/persian.svg)](https://pub.dartlang.org/packages/persian)
 
-Implements helper functions/extensions for Persian language/culture. Includes number replacement methods for String class and PersianDate class.
+Utilities and Humanizer for Persian language and culture.
 
-This package is a Dart package, which can be used in both Flutter and Dart projects.
+## Features
+* `PersianDate` class which converts a `DateTime` to Jalali date.
+* String corrections replacing `ي` with `ی` and `ك` with `ک`.
+* Humanize numbers to Persian text: 123 => صد و بیست و سه.
+* Convert numbers to Persian numbers: 123 => ۱۲۳.
+* Can be used in Dart and Flutter projects.
+* Supports all platforms (Android, iOS, macOS, Windows, Linux, Web).
+
 
 ## Getting Started
 
-**Import the package**
+In your `pubspec.yaml` file add:
+
+```dart
+dependencies:
+  persian: any
+```
+
+## Usage
+
+Import the package:
 
 ```dart
 import 'package:persian/persian.dart';
 ```
 
-**Use the extension methods**
+Then, use the extension methods:
+
 ```dart
 String myText = '123456789';
 String myPersianText = myText.withPersianNumbers(); //Will be ۱۲۳۴۵۶۷۸۹

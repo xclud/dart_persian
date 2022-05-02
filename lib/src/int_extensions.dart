@@ -112,7 +112,7 @@ String _toPersianString(int number, String separator) {
   }
 
   final s = _convertLessThanOneThousand(thousands);
-  if (s.length > 0) {
+  if (s.isNotEmpty) {
     parts.add(s.join(separator));
   }
 

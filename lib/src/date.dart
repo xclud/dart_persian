@@ -12,20 +12,10 @@ int _getJulianDayNumber(int year, int month, int day) {
 
 /// An instant in Persian calendar, such as Farvardin 11, 1365.
 class PersianDate {
-  final int year;
-  final int month;
-  final int day;
-
-  @override
-  String toString() {
-    return '$year/${month.toString().padLeft(2, '0')}/${day.toString().padLeft(2, '0')}'
-        .withPersianNumbers();
-  }
-
   /// Creates a [PersianDate] from the Persian year, month and day.
   ///
   /// Example: PersianDate(1400, 12, 29);
-  PersianDate(
+  const PersianDate(
     this.year,
     this.month,
     this.day,
@@ -73,11 +63,16 @@ class PersianDate {
   /// 1970-01-01T00:00:00Z + [millisecondsSinceEpoch] ms in the given
   /// time zone (local or UTC).
   ///
-  factory PersianDate.fromMillisecondsSinceEpoch(int millisecondsSinceEpoch,
-          {bool isUtc = false}) =>
-      PersianDate.fromDateTime(DateTime.fromMillisecondsSinceEpoch(
+  factory PersianDate.fromMillisecondsSinceEpoch(
+    int millisecondsSinceEpoch, {
+    bool isUtc = false,
+  }) =>
+      PersianDate.fromDateTime(
+        DateTime.fromMillisecondsSinceEpoch(
           millisecondsSinceEpoch,
-          isUtc: isUtc));
+          isUtc: isUtc,
+        ),
+      );
 
   /// Constructs a new [PersianDate] instance
   /// with the given [microsecondsSinceEpoch].
@@ -87,52 +82,35 @@ class PersianDate {
   /// The constructed [PersianDate] represents
   /// 1970-01-01T00:00:00Z + [microsecondsSinceEpoch] us in the given
   /// time zone (local or UTC).
-  factory PersianDate.fromMicrosecondsSinceEpoch(int microsecondsSinceEpoch,
-          {bool isUtc = false}) =>
-      PersianDate.fromDateTime(DateTime.fromMicrosecondsSinceEpoch(
+  factory PersianDate.fromMicrosecondsSinceEpoch(
+    int microsecondsSinceEpoch, {
+    bool isUtc = false,
+  }) =>
+      PersianDate.fromDateTime(
+        DateTime.fromMicrosecondsSinceEpoch(
           microsecondsSinceEpoch,
-          isUtc: isUtc));
+          isUtc: isUtc,
+        ),
+      );
+
+  final int year;
+  final int month;
+  final int day;
+
+  @override
+  String toString() {
+    return '$year/${month.toString().padLeft(2, '0')}/${day.toString().padLeft(2, '0')}'
+        .withPersianNumbers();
+  }
 }
 
 /// Internal class
 class _PersianDateCalculation {
-  /// Number of years since the last leap year (0 to 4)
-  final int leap;
-
-  /// Gregorian year of the beginning of Persian year
-  final int gy;
-
-  /// The March day of Farvardin the 1st (1st day of jy)
-  final int march;
-
-  _PersianDateCalculation({
+  const _PersianDateCalculation({
     required this.leap,
     required this.gy,
     required this.march,
   });
-
-  static final List<int> breaks = const [
-    -61,
-    9,
-    38,
-    199,
-    426,
-    686,
-    756,
-    818,
-    1111,
-    1181,
-    1210,
-    1635,
-    2060,
-    2097,
-    2192,
-    2262,
-    2324,
-    2394,
-    2456,
-    3178,
-  ];
 
   /// This determines if the Persian Year is
   /// leap (366-day long) or is the common year (365 days), and
@@ -192,4 +170,36 @@ class _PersianDateCalculation {
 
     return _PersianDateCalculation(leap: leap, gy: gy, march: march);
   }
+
+  /// Number of years since the last leap year (0 to 4)
+  final int leap;
+
+  /// Gregorian year of the beginning of Persian year
+  final int gy;
+
+  /// The March day of Farvardin the 1st (1st day of jy)
+  final int march;
+
+  static final List<int> breaks = const [
+    -61,
+    9,
+    38,
+    199,
+    426,
+    686,
+    756,
+    818,
+    1111,
+    1181,
+    1210,
+    1635,
+    2060,
+    2097,
+    2192,
+    2262,
+    2324,
+    2394,
+    2456,
+    3178,
+  ];
 }

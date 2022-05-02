@@ -11,7 +11,7 @@ extension PersianDateTimeExtensions on DateTime {
 extension PersianStringExtensions on String {
   /// Replaces any number with English numbers.
   String withEnglishNumbers() {
-    if (this.isEmpty) {
+    if (isEmpty) {
       return this;
     }
 
@@ -43,7 +43,7 @@ extension PersianStringExtensions on String {
 
   /// Replaces English numbers (and some other number system) with Persian numbers.
   String withPersianNumbers() {
-    if (this.isEmpty) {
+    if (isEmpty) {
       return this;
     }
 
@@ -75,7 +75,7 @@ extension PersianStringExtensions on String {
 
   /// Replaces ك with ک, and ي with ی.
   String withPersianLetters() {
-    if (this.isEmpty) {
+    if (isEmpty) {
       return this;
     }
 
