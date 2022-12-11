@@ -2,6 +2,7 @@ import 'date.dart';
 
 /// Persian DateTime extension methods.
 extension PersianDateTimeExtensions on DateTime {
+  /// Converts a [DateTime] to a [PersianDate].
   PersianDate toPersian() {
     return PersianDate.fromDateTime(this);
   }

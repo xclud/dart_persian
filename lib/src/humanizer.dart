@@ -1,3 +1,3 @@
-class PersianHumanizer {
-  //
-}
+// class PersianHumanizer {
+//   //
+// }

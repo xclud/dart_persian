@@ -93,8 +93,13 @@ class PersianDate {
         ),
       );
 
+  /// The Year.
   final int year;
+
+  /// The Month.
   final int month;
+
+  /// The Day.
   final int day;
 
   @override
