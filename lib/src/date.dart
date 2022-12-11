@@ -1,5 +1,4 @@
-import 'dart:core';
-import 'extensions.dart';
+part of persian;
 
 int _getJulianDayNumber(int year, int month, int day) {
   return (((year + ((month - 8) ~/ 6) + 100100) * 1461) ~/ 4) +

@@ -1,3 +1,5 @@
+part of persian;
+
 /// Persian extension utilities for Integers.
 extension IntExtensions on int {
   /// Converts an integer into a human-readable text.

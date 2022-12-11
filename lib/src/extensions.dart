@@ -1,4 +1,4 @@
-import 'date.dart';
+part of persian;
 
 /// Persian DateTime extension methods.
 extension PersianDateTimeExtensions on DateTime {

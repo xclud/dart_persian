@@ -1,4 +1,4 @@
-## [1.1.2]
+## [1.2.0]
 
 * Better lints, a more complete example.
 
